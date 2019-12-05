@@ -133,5 +133,12 @@ void loop() {
     Serial.println("Gate is opening ");
   }
   
+  if (buttonState == HIGH) {
+      // turn CMD on:
+      digitalWrite(cmdPin, HIGH);
+      delay(1000);
+      digitalWrite(cmdPin, LOW);
+  }
+  
   delay(2000);
 }
