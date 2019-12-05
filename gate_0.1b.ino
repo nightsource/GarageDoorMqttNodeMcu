@@ -6,7 +6,7 @@
 const int sensorOpen =  D1;
 const int sensorClose =  D3;
 const int buttonPin = D5;
-const int ledPin =  D4;
+const int cmdPin =  D4;
 
 int flag=0;
 int buttonState = 0; 
@@ -53,7 +53,7 @@ void setup() {
 // Setup notification button on pin D1
   pinMode(sensorOpen,INPUT_PULLUP);
   pinMode(sensorClose,INPUT_PULLUP);
-  pinMode(ledPin,OUTPUT);
+  pinMode(cmdPin,OUTPUT);
   pinMode(buttonPin, INPUT);
 }
 
@@ -66,9 +66,9 @@ void callback(char* topic, byte* payload, unsigned int length)
   {
     if (newPayload == "push")
     {
-      digitalWrite(ledPin,HIGH);
+      digitalWrite(cmdPin,HIGH);
       delay(1000);
-      digitalWrite(ledPin,LOW);
+      digitalWrite(cmdPin,LOW);
     }
   }
 } //end callback
@@ -116,14 +116,12 @@ void loop() {
   if (openState==1 && closeState==0) {
     client.publish(mqtt_stttopic, "Open");
     Serial.println("Gate is open");
-    digitalWrite(ledPin,HIGH);
     flag=0;
   }
   if (openState==0 && closeState==1)
   {
     client.publish(mqtt_stttopic, "Closed");
     Serial.println("Gate is closed");
-    digitalWrite(ledPin,LOW);
     flag=1;
   }
   if (openState==1 && closeState==1 && flag==0){
@@ -133,13 +131,6 @@ void loop() {
   if (openState==1 && closeState==1 && flag==1){
     client.publish(mqtt_stttopic, "Opening");
     Serial.println("Gate is opening ");
-  }
-    if (buttonState == HIGH) {
-    // turn LED on:
-  digitalWrite(ledPin, HIGH);
-  } else {
-    // turn LED off:
-    digitalWrite(ledPin, LOW);
   }
   
   delay(2000);
