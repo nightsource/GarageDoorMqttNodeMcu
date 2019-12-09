@@ -67,7 +67,6 @@ void callback(char* topic, byte* payload, unsigned int length)
     if (newPayload == "push")
     {
       digitalWrite(cmdPin,HIGH);
-      delay(1000);
       digitalWrite(cmdPin,LOW);
     }
   }
@@ -136,7 +135,6 @@ void loop() {
   if (buttonState == HIGH) {
       // turn CMD on:
       digitalWrite(cmdPin, HIGH);
-      delay(1000);
       digitalWrite(cmdPin, LOW);
   }
   
