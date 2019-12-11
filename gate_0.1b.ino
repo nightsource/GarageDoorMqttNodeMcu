@@ -146,7 +146,7 @@ void buttonAction() {
   buttonState = digitalRead(buttonPin);
   if (buttonState == HIGH) {
       // turn CMD on:
-      digitalWrite(cmdPin, LOW);
+      digitalWrite(cmdPin, HIGH);
     } else {
       // turn CMD off:
       digitalWrite(cmdPin, LOW);
