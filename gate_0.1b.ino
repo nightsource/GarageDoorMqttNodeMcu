@@ -1,6 +1,7 @@
 #include <PubSubClient.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
+#define FIVEMIN (1000UL * 60 * 5)
 
 //Hardware configuration
 const int sensorOpen =  D1;
@@ -12,6 +13,7 @@ int flag=0;
 int buttonState = 0;
 String gateState="offline";
 String oldGateState="";
+unsigned long rolltime = millis() + FIVEMIN;
 
 //USER CONFIGURED SECTION START//
 const char* ssid = "YOUR_SSID_NETWORK";
@@ -132,9 +134,18 @@ void magnetState(){
     Serial.println("Gate is opening ");
   }
 
+  if((long)(millis() - rolltime) >= 0) {
+   //  Do your five minute roll stuff here
+    char charBuf[gateState.length() + 1];
+    gateState.toCharArray(charBuf, gateState.length()+1);
+    client.publish(mqtt_stttopic, charBuf);
+    Serial.println("State changed.Publishing ");
+    oldGateState=gateState;
+    rolltime += FIVEMIN;
+  }
   if(gateState!=oldGateState){
     char charBuf[gateState.length() + 1];
-    gateState.toCharArray(charBuf, gateState.length());
+    gateState.toCharArray(charBuf, gateState.length()+1);
     client.publish(mqtt_stttopic, charBuf);
     Serial.println("State changed.Publishing ");
     oldGateState=gateState;
